@@ -1,0 +1,10 @@
+multix-output/
+renders/
+*.mp4
+*.m4a
+*.wav
+*.mp3
+*.flac
+node_modules/
+__pycache__/
+.DS_Store
