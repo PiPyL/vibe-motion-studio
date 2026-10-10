@@ -110,6 +110,22 @@ padding `12px 28px`, 40 px Be Vietnam Pro 700, `color:var(--ink)`.
 Active word: `background:var(--lav-dk)` (not `--lav` — contrast),
 white text, `radius:12px`, `padding:2px 10px`. Bottom band only, max 1400 px.
 
+## Vertical
+
+Toybox tower — one squishy layer at a time:
+
+- `.h1`: 36–44 px Plus Jakarta (`0.56 × 64–80 px`); accent pill
+  `padding:4px 16px`, 30 px text.
+- `.clay-card`: `radius:28px` (down from 36), padding `26px 28px`, full width
+  minus 64 px margins; squash pre-compress + `elastic.out(1,0.45)` unchanged.
+- `.bubbly-pill`: 20 px Poppins, kick compress 0.94 kept — pills stack
+  vertically with 16 px gaps, never side by side.
+- Mascot scales 0.75×, bottom-center above captions (bottom 220 px reserved);
+  blink/squash/talk/flip behaviors unchanged.
+- Floating props: max 5 (down from 8), smaller radii; confetti 60 pieces
+  (down from 80) — narrower frame needs fewer particles for the same density.
+- Captions: milk pill 38 px, box up to 960 px, bottom 64 px.
+
 ## Audio & Music matching
 
 - BPM 112–118 (upbeat indie pop, marimba chilhop, cheerful future bass with

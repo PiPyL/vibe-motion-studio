@@ -78,3 +78,21 @@ frames in the renderer.
 
 Yellow narration box (5 px ink border, hard ink + cyan shadow), 40 px Be Vietnam
 Pro 800, ink text; the current word turns `#a3005a`. Full-width bottom band.
+
+## Vertical
+
+Stacked comic pages — one panel per beat, full 1080 width:
+
+- `.panel`: border 4 px (down from 6), triple offset shadow scaled 0.6×
+  (`-4px -3px 0 cyan, 4px 3px 0 magenta, 10px 10px 0 ink`), corner halftone kept.
+- `.hl`: 56–72 px Anton (`0.56 × 100–130 px` range), ink stroke 2 px, keep
+  cyan/magenta `var(--rx)` offsets and extrusion — misregistration reads even
+  better in portrait.
+- `.kick`: Bangers box, rotation −3° kept, 28–32 px.
+- Headline intro unchanged (kick label + 3D word flips); words per scene ≤ 6.
+- Universes/rays/skyline/tags/tone layers carry over; `#speed` lines and
+  `#glitch-bars` are orientation-agnostic.
+- Mascot scales 0.7×, bottom-center above the caption band (bottom 220 px
+  reserved). HUD corner box moves top-right, upright (no tilt) for legibility.
+- Transitions `glitch/dots/flip/slam` unchanged; `dots` wipe radius `--r`
+  0 → 30 → 0 (narrower frame).

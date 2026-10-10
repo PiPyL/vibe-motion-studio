@@ -106,6 +106,24 @@ with 1 px `var(--black)` / white border, `border-radius:4px`, padding
 white text, `padding:2px 8px`. Swap theme with scene — never grey-on-grey.
 Width caps at 1400 px centered, bottom band only.
 
+## Vertical
+
+Editorial broadsheet folded to phone width — the grid does the work:
+
+- `.headline-giant`: 56–80 px (`0.56 × 100–140 px`), tracking −0.05em and
+  0.88 line-height kept; accent serif tape unchanged; words per scene ≤ 5.
+- Grid: 12 columns → 6 columns, hairlines 1 px at 10%; folio/progress rule
+  unchanged, top edge.
+- `.swiss-card`: full width minus 48 px margins, padding `24px 26px`;
+  comparison matrix becomes 1-row-per-card stacked (never squeeze 3 columns
+  into 1080 px — numbers go mono 20 px, badges keep YES/NO).
+- `.marquee-tape`: 48 px band, 22 px mono; freeze-on-drop rule unchanged.
+- `.index-stamp`: 18 px, stays top-left of each card.
+- Transitions `invert/curtain/column-shutter/hard-cut` unchanged;
+  `column-shutter` uses 3 strips instead of 4. Drop slam headline 100 px
+  (down from 180), zero overshoot kept.
+- Captions: brutalist badge 38 px, box up to 960 px.
+
 ## Audio & Music matching
 
 - BPM 120–126 (minimal techno, crisp breakbeats, tight rimshots + double-bass

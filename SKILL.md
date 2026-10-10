@@ -7,7 +7,7 @@ category: media
 keywords: [motion-graphic, video, hyperframes, gsap, launch-video, voice-over, captions, karaoke, beat-sync, elevenlabs, gemini-tts, multix, vieneu-tts, free-voice, spider-verse, comic, keynote, cyberpunk, hud, swiss-editorial, claymorphism, tactile-clay, social-encode]
 metadata:
   author: BestAgentKits
-  version: "1.0.0"
+  version: "1.1.0"
 license: MIT
 ---
 

@@ -76,6 +76,25 @@ Outro: shutdown sequence above.
 
 Tactical teletype bar: `background:rgba(5,8,15,0.92)`, left 3 px `var(--cyan)` bar, padding `10px 22px`, 42 px Be Vietnam Pro 600, `color:#b8e6ff`. Active word: `background:rgba(0,240,255,0.18)`, `color:var(--cyan)`, `box-shadow:var(--glow-c)`, brackets via surrounding spans — never pure white on cyan.
 
+## Vertical
+
+Tactical portrait readout — single-column console:
+
+- `.h1`: 40–44 px Orbitron (`0.56 × 68–76 px`), tracking 0.04em kept;
+  descramble intro unchanged, stagger 0.035.
+- `.hud-panel`: full width minus 64 px margins, clip-path corners 12 px
+  instead of 16; header status row unchanged.
+- `.metric-tile`: 1 column stacked (never 3-up); each tile full-width,
+  `odo` 40 px, sparkline 200×36.
+- `.terminal-window`: full-width, `.term-line` 22 px; keep traffic dots.
+- `.reticle`: 80 px brackets (down from 120), lock-on `pop` unchanged.
+- `.alert-banner`: full-width top bar, 24 px mono — fits without wrapping.
+- Radar grid: polar rings recenter to upper third so telemetry doesn't fight
+  captions; sweep arm 48 s unchanged. Corner HUD telemetry moves to a single
+  top status line (`LAT/LON/F-frame` inline, 18 px mono).
+- Transitions `glitch/shutter/wireframe-zoom/laser-wipe` unchanged; laser
+  travels the shorter height, keep 0.18 s.
+
 ## Audio & Music matching
 
 - BPM 122–128 (dark synthwave, darksynth, industrial techno — four-on-floor kicks for clean `isKick`).
