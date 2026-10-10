@@ -36,6 +36,24 @@ git clone https://github.com/PiPyL/vibe-motion-studio.git
   `~/.agents/skills/vibe-motion-studio/`.
 - Test: ask *“làm video motion graphic giới thiệu release”*.
 
+## Starter prompts
+
+Copy-paste briefs for common jobs — each maps to a style, ratio, duration and
+voice. Full texts live in `assets/templates/prompts/`:
+
+| # | Job | Style / ratio |
+|---|---|---|
+| 01 | Product launch film | glass keynote / 16:9 |
+| 02 | Changelog video | glass keynote / 16:9 |
+| 03 | Explainer | soft clay / 16:9 |
+| 04 | Vertical social cut | comic / 9:16 |
+| 05 | Product reveal / drop | cyberpunk / 16:9 |
+| 06 | Stats / data story | swiss / 16:9 |
+| 07 | Mobile app showcase | soft clay / 9:16 |
+| 08 | DevTool launch | cyberpunk / 16:9 |
+| 09 | Brand announcement | swiss / 16:9 |
+| 10 | Restyle existing video | any / any |
+
 ## Auto-install with AI
 
 Copy the prompt below into your coding agent (Claude Code, AgentKit, opencode, …)
