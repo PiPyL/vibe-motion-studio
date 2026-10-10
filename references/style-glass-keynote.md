@@ -61,6 +61,21 @@ captions → `#flash` → `#fade`.
 Dark translucent pill (`rgba(10, 8, 30, 0.72)`, radius 20, 46 px Be Vietnam Pro 700),
 unread words 50% white, the current word `#e9d5ff`, then white.
 
+## Vertical
+
+Stacked portrait pattern (headline top, glass card below) — never side by side:
+
+- `.kicker`: top-left at 64/72, badge + 20 px mono label.
+- `.h1`: 40 px Plus Jakarta 800 (`0.56 × 70 px`), `<em>` serif accent unchanged,
+  max 5 words per scene — cut words, never go below 36 px.
+- `.card`: `radius:20`, padding `24px 26px`, full width minus 64 px margins.
+- `.slam`: 110 px max, centered.
+- Mascot + `.lvl` badge: top-right corner (64 px from edges); mascot never
+  overlaps the caption band (bottom 200 px reserved).
+- Orbs/grid/vignette/`#wipe`/flash carry over unchanged; `#wipe` band angle
+  stays diagonal, it reads the same in portrait.
+- Captions: 40 px pill, box up to 960 px, bottom 64 px.
+
 ## Known issue in the reference
 
 Its mix used music −7 dB with sidechain ratio 5 / threshold 0.02, which sat the
