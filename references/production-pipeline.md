@@ -108,7 +108,7 @@ npx --yes hyperframes@0.7.99 snapshot --at 2,18.5,40,80,120,148 --describe false
 `check` flags overlaps and contrast; use `data-layout-allow-overlap` only on
 intentional overlaps (stacked cards, mascots over panels). Snapshots are large
 PNGs: downscale to JPEG before viewing them if the tool context is limited.
-Look at every scene's busiest moment, the caption band and the signature.
+Look at every scene's busiest moment and the caption band.
 
 ## 8. Render, restore the mix, verify
 

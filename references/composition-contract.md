@@ -73,8 +73,8 @@ subtle: reactions are texture, cuts and drops carry the rhythm.
 
 - Vietnamese karaoke: one `.cap` per caption chunk (≤ 9 words, split at
   punctuation), each word a span that highlights at its borrowed English onset.
-- Bottom band only, width stops left of the signature (1660 px of 1920 in the
-  comic edition). Nothing else may live in that band: `check` will flag overlap.
+- Bottom band only, full frame width (`.cap` 1920 px, box up to 1700 px).
+  Nothing else may live in that band: `check` will flag overlap.
 
 ## Mascot and HUD
 
@@ -99,9 +99,3 @@ subtle: reactions are texture, cuts and drops carry the rhythm.
 - Keep `index.html` in one file unless it gets unwieldy; lint warns above ~1000
   lines (`composition_file_too_large`) but renders fine. The references are
   1332 and 1636 lines.
-
-## Signature
-
-"Zuey" handwritten signature bottom-right from 1.0 s to the end: text revealed
-with a stepped `clipPath`, underline drawn with `strokeDashoffset`. Style it to
-match the video (marker font with misregistration for comic).

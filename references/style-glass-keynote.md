@@ -65,5 +65,4 @@ unread words 50% white, the current word `#e9d5ff`, then white.
 
 Its mix used music −7 dB with sidechain ratio 5 / threshold 0.02, which sat the
 music ~10 dB under the voice. Use the balance from `audio-and-beat-sync.md` for
-new work. It has no signature; add the one from `composition-contract.md` if the
-video needs it.
+new work.

@@ -5,7 +5,7 @@ cyan/magenta misregistration, RGB glitch cuts, halftone dot wipes, speed-line
 bursts, graffiti, a skyline in exaggerated perspective, and motion "on twos".
 Reference edition: the [published Dewee v3.34 comic
 video](https://x.com/goon_nguyen/status/2103332658151555231), 151 s, 110 BPM,
-voice Fenrir, drops at beats 40/152/200, signature "Zuey".
+voice Fenrir, drops at beats 40/152/200.
 
 Choose it for hype launches, social cuts and anything that should feel young
 and playful. Inspired by the look only: no Marvel names, logos or characters.
@@ -20,7 +20,7 @@ and playful. Inspired by the look only: no Marvel names, logos or characters.
 ```
 
 Fonts (all OFL except Permanent Marker, Apache 2.0): Anton (headlines), Bangers
-(labels, kickers, SFX words), Permanent Marker (signature, graffiti notes),
+(labels, kickers, SFX words), Permanent Marker (graffiti notes),
 Be Vietnam Pro 700/800 (captions), JetBrains Mono (code, logs).
 
 ## Layers (back to front)
@@ -31,7 +31,7 @@ backgrounds cross-faded per scene) → `#rays` (repeating-conic sunburst, slow
 140° rotation) → `#skyline` (per-scene toggle) → `#tags` (graffiti PNG, slow
 drift) → `#tone` (dots PNG with radial mask, pulses on beats) → `#shake` →
 `#pulse` → scenes `#sc01…#sc16`. Above the stage: `#speed` → `#glitch-bars` →
-`#dots` (halftone wipe) → `#flash` → `#hud` → `#captions` → `#sig` → `#grain`
+`#dots` (halftone wipe) → `#flash` → `#hud` → `#captions` → `#grain`
 (overlay PNG) → `#edge` vignette → `#fade`.
 
 Baked textures in the project's `assets/images/`: `dots-ink.png`, `dots-cyan.png`,
@@ -77,11 +77,4 @@ frames in the renderer.
 ## Captions
 
 Yellow narration box (5 px ink border, hard ink + cyan shadow), 40 px Be Vietnam
-Pro 800, ink text; the current word turns `#a3005a`. Width stops at 1660 px so
-it never touches the signature.
-
-## Signature
-
-`#sig` bottom-right (right 40, bottom 22): "Zuey" in Permanent Marker 76 px,
-white fill with ink stroke and cyan/magenta/ink shadows, revealed with
-`steps(8)` clip; a magenta underline stroke draws in after it.
+Pro 800, ink text; the current word turns `#a3005a`. Full-width bottom band.

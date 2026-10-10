@@ -51,7 +51,7 @@ This skill does NOT handle:
 
 1. Pin the outcome before touching files: topic and sources, style (one of the
    five, or a new one derived from them), duration, voice language (English VO +
-   Vietnamese captions by default), ending, signature. Ask only if the style or
+   Vietnamese captions by default), ending. Ask only if the style or
    the facts source is unknown.
 2. Create `assets/videos/<slug>/` (never overwrite a finished edition) and a plan
    under `plans/` following the repo convention. Copy the templates from
@@ -90,7 +90,7 @@ into project files, plans or reports.
 - `references/audio-and-beat-sync.md`: voice, SFX cues, music plans,
   bar-splice arrangement, anchors, mix numbers and the ducking pitfall.
 - `references/composition-contract.md`: TIMING shape, helpers, determinism,
-  scene windows, captions, mascot, renderer limits, signature.
+   scene windows, captions, mascot and renderer limits.
 - `references/style-glass-keynote.md` / `references/style-comic-spiderverse.md` /
   `references/style-cyberpunk-hud.md` / `references/style-swiss-editorial.md` /
   `references/style-soft-tactile-clay.md`:

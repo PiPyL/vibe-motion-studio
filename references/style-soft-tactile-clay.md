@@ -5,7 +5,7 @@ depth, 36 px cards, pill buttons that squash on kicks, elastic physics and
 pastel confetti that explodes only on drops. Think Pitch / Duolingo / Linear
 icons — soft, never flat, never childish-cheap.
 Reference edition: target 120–140 s, 112–118 BPM, voice bubbly storyteller,
-drops at feature trio + finale. Signature "Zuey" rounded + peach underline.
+drops at feature trio + finale.
 
 Choose it for B2C mobile, EdTech, productivity, collab tools, creator apps,
 health & wellness — where friendliness converts.
@@ -58,7 +58,7 @@ black frames at 1080p — always use PNGs.
   `padding:4px 20px`). Intro: words `pop` stagger 0.05 with `back.out(1.8)`.
 - `.bubbly-pill`: `radius:999`, pastel fill, 24 px Poppins 700, padding
   `14px 28px`, `box-shadow:var(--sh-clay)`. Compresses `scale:0.94` 0.08 s on
-  every kick then releases — the signature beat feel.
+   every kick then releases — the characteristic squash-and-release beat feel.
 - `.emoji-avatar`: 96 px clay icon circle, `bob y:±8px sine.inOut`, tilts ±6°
   on snare. Max 3 per scene for perf.
 - `.toggle`: chunky 120×64 pill track + 52 px knob PNG; knob slides
@@ -109,13 +109,6 @@ Milk cloud pill: `background:rgba(255,255,255,0.94)`,
 padding `12px 28px`, 40 px Be Vietnam Pro 700, `color:var(--ink)`.
 Active word: `background:var(--lav-dk)` (not `--lav` — contrast),
 white text, `radius:12px`, `padding:2px 10px`. Bottom band only, max 1400 px.
-
-## Signature
-
-`#sig` bottom-right: "Zuey" Outfit 700 68 px, `color:var(--ink)`, peach
-underline 8 px `radius:999` drawn via `draw`, card-style white pill behind
-(`radius:999`, `sh-clay`, padding `8px 24px`). `pop` in at 1.0 s, gentle bob
-after. Friendly, never corporate-mono.
 
 ## Audio & Music matching
 

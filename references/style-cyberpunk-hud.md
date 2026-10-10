@@ -5,7 +5,7 @@ polar grid + scan sweep, scanlines, corner reticles, descramble headlines and
 console logs that type in on spoken words. Think Andor / Oblivion UI, not cheap
 neon gamer wallpaper.
 Reference edition: target 135–150 s, 122–128 BPM, voice cold tactical officer,
-drops at feature reveals + finale. Signature "Zuey" in mono cyan.
+drops at feature reveals + finale.
 
 Choose it for developer tools, cybersecurity, AI models & infra, cloud, Web3
 protocols, high-frequency trading — where precision and speed sell.
@@ -75,10 +75,6 @@ Outro: shutdown sequence above.
 ## Captions
 
 Tactical teletype bar: `background:rgba(5,8,15,0.92)`, left 3 px `var(--cyan)` bar, padding `10px 22px`, 42 px Be Vietnam Pro 600, `color:#b8e6ff`. Active word: `background:rgba(0,240,255,0.18)`, `color:var(--cyan)`, `box-shadow:var(--glow-c)`, brackets via surrounding spans — never pure white on cyan.
-
-## Signature
-
-`#sig` bottom-right: "Zuey" JetBrains Mono 700 64 px, `color:var(--cyan)`, `text-shadow:var(--glow-c)`, reveal with stepped `clipPath` + cyan underline `draw`. Stays legible over dark scenes; add 8 px black stroke if a light panel passes behind.
 
 ## Audio & Music matching
 

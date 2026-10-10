@@ -5,7 +5,7 @@ grid, colossal 100–140 px headlines, serif-italic tape accents, brutalist
 zero-radius cards, marquee ribbons and single-frame inversions on drops.
 Think Stripe Press / design biennale, not a slide deck.
 Reference edition: target 130–150 s, 120–126 BPM, voice design curator,
-drops at manifesto + finale. Signature "Zuey" in mono uppercase stamp.
+drops at manifesto + finale.
 
 Choose it for design toolkits, creative SaaS, brand repositioning, agencies,
 curated releases, executive B2B — where craftsmanship and prestige sell.
@@ -86,7 +86,7 @@ plain divs/SVG lines for renderer safety.
   headline slams center with zero overshoot + `flash-invert` 1 frame. Second
   drop adds orange `FIG.` stamp.
 - Outro (colophon): paper canvas, stacked credits `rise` stagger 0.08 on word
-  onsets (`Design → Type → System → Zuey 2026`), border folio `END`, `fade` 0.4 s.
+   onsets (`Design → Type → System → 2026`), border folio `END`, `fade` 0.4 s.
 
 ## Scene choreography (follow, don't invent)
 
@@ -105,13 +105,6 @@ with 1 px `var(--black)` / white border, `border-radius:4px`, padding
 `10px 20px`, 42 px Be Vietnam Pro 700. Active word: `background:var(--blue)`,
 white text, `padding:2px 8px`. Swap theme with scene — never grey-on-grey.
 Width caps at 1400 px centered, bottom band only.
-
-## Signature
-
-`#sig` bottom-right: "ZUEY" Space Mono 700 48 px uppercase,
-`letter-spacing:0.12em`, black on paper / white on inverse, typewriter reveal
-(char stagger 0.04 via `typeIn`) + 24 px rule draw underneath. No script font
-here — Swiss sticks to mono.
 
 ## Audio & Music matching
 
