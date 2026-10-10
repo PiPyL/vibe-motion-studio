@@ -44,6 +44,9 @@ ROOT = Path(__file__).resolve().parent.parent  # project dir (scripts/..)
 
 def scene_text(scene, lang):
     if lang == "vi":
+        missing = [i for i, l in enumerate(scene["lines"]) if not l.get("vi")]
+        if missing:
+            sys.exit(f"scene {scene['id']} lines {missing} have no `vi` text (required for --lang vi)")
         return " ".join(l["vi"] for l in scene["lines"])
     return " ".join(l.get("say") or l["en"] for l in scene["lines"])
 

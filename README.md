@@ -57,7 +57,8 @@ Install the vibe-motion-studio skill for me, fully via terminal, and report the 
 3. Install system dependencies (skip any step that is already satisfied; NEVER use sudo —
    if a step needs admin rights, leave it for me and list it in the final report):
    - Node.js (check: node -v). If missing, do NOT install it yourself — list it as a manual step.
-   - ffmpeg (check: ffmpeg -version). If missing: macOS `brew install ffmpeg`, Ubuntu/Debian `apt install -y ffmpeg` (user-space only). On Windows, stop here and point me to the manual install section in the repo README.
+   - ffmpeg (check: ffmpeg -version). If missing: macOS `brew install ffmpeg`, Ubuntu/Debian `apt install -y ffmpeg`.
+     That apt command normally needs sudo, which you must NOT use — so on Linux just record ffmpeg as a manual step instead of attempting the install. On Windows, stop here and point me to the manual install section in the repo README.
    - Python 3.10+ with numpy and scipy: `pip install numpy scipy` (check: `python3 -c "import numpy, scipy"`).
    - VieNeu-TTS for the free voice fallback: `pip install vieneu` (check: `python3 -c "import vieneu"`).
 

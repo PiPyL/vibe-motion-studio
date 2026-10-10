@@ -111,7 +111,7 @@ Width caps at 1400 px centered, bottom band only.
 `#sig` bottom-right: "ZUEY" Space Mono 700 48 px uppercase,
 `letter-spacing:0.12em`, black on paper / white on inverse, typewriter reveal
 (char stagger 0.04 via `typeIn`) + 24 px rule draw underneath. No script font
-here — Swiss zich houdt aan mono.
+here — Swiss sticks to mono.
 
 ## Audio & Music matching
 
