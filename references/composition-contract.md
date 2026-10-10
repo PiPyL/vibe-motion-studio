@@ -99,3 +99,23 @@ subtle: reactions are texture, cuts and drops carry the rhythm.
 - Keep `index.html` in one file unless it gets unwieldy; lint warns above ~1000
   lines (`composition_file_too_large`) but renders fine. The references are
   1332 and 1636 lines.
+
+## Vertical (9:16)
+
+Start from `assets/templates/index-skeleton-vertical.html` (1080×1920 root,
+portrait). Audio, TIMING, beat grid, mix and all helpers (`B/isKick/W/pop/
+rise/flash/shake`) work unchanged — only geometry changes:
+
+- Root: `data-width="1080" data-height="1920"`; every `.layer` 1080×1920.
+- Horizontal scale factor 1080/1920 = 0.5625: multiply landscape x positions,
+  widths and headline sizes by ~0.56 (e.g. 120 px margins → 64–80 px,
+  120 px headlines → ~68 px).
+- Stack scenes vertically (headline top, card below) — never place two content
+  blocks side by side; 1080 px is too narrow.
+- Captions: full 1080 width band, box up to 960 px, 40 px type.
+- HUD/mascot corners remap to the taller frame (top-right badge, bottom mascot
+  above the caption band). Keep clear of the caption band: `check` still flags
+  overlap.
+- Pixel count equals 1920×1080, so renderer limits carry over unchanged.
+- Per-style remapped values live in each style reference's `## Vertical`
+  section; follow them instead of inventing geometry.

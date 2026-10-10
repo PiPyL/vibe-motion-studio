@@ -136,6 +136,24 @@ ffmpeg -y -i renders/<slug>.mp4 -c:v libx264 -preset slow -crf 21 -maxrate 6M -b
 Result on the comic edition: 406 MB → 101.6 MB, SSIM 0.977. Check with
 `ffmpeg -i social.mp4 -i master.mp4 -lavfi ssim -f null -` when quality matters.
 
+## 9b. Vertical edition (9:16)
+
+A vertical video is a separate project dir starting from
+`<skill>/assets/templates/index-skeleton-vertical.html` plus the style
+reference's `## Vertical` section. Steps 1–7 are identical (same audio, TIMING
+and mix); only composition, render and verify differ:
+
+```bash
+npx --yes hyperframes@0.7.99 render -q high -f 30 --strict -o renders/<slug>-vertical.mp4
+ffmpeg -y -i renders/<slug>-vertical.mp4 -i ./assets/audio/mix.m4a -map 0:v:0 -map 1:a:0 -c copy -movflags +faststart renders/out-vertical.mp4
+# replace renders/<slug>-vertical.mp4 with renders/out-vertical.mp4
+ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,sample_rate,channels -show_entries format=duration renders/<slug>-vertical.mp4
+# expect width=1080 height=1920; same ebur128 (~-14 LUFS, peak <= -1 dBFS) and blackdetect gates
+ffmpeg -y -i renders/<slug>-vertical.mp4 -c:v libx264 -preset slow -crf 21 -maxrate 6M -bufsize 12M \
+  -pix_fmt yuv420p -profile:v high -level 4.1 -g 60 -c:a aac -b:a 192k -ar 48000 \
+  -movflags +faststart renders/<slug>-vertical-social.mp4
+```
+
 ## 10. Studio preview
 
 ```bash

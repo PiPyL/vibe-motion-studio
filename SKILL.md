@@ -1,6 +1,6 @@
 ---
 name: vibe-motion-studio
-description: Produce beat-synced 1080p motion-graphic videos in HyperFrames (HTML + GSAP) with AI voice-over, Vietnamese karaoke captions, SFX and generated music, in one of five proven styles (glass keynote, Spider-Verse comic, cyberpunk tactical HUD, Swiss editorial kinetic, soft tactile clay), with a free on-device VieNeu-TTS voice fallback when cloud quotas run out. Use when the user asks for a launch/release/feature video, motion graphic, animated explainer or promo clip, or a restyle of an existing one.
+description: Produce beat-synced motion-graphic videos in HyperFrames (HTML + GSAP) in 16:9 landscape or 9:16 portrait, with AI voice-over, Vietnamese karaoke captions, SFX and generated music, in one of five proven styles (glass keynote, Spider-Verse comic, cyberpunk tactical HUD, Swiss editorial kinetic, soft tactile clay), with a free on-device VieNeu-TTS voice fallback when cloud quotas run out. Use when the user asks for a launch/release/feature video, motion graphic, animated explainer or promo clip, or a restyle of an existing one.
 user-invocable: true
 when_to_use: "Use when asked to make or restyle a motion-graphic/launch/changelog/explainer video with voice-over, captions and music synced to the beat, e.g. 'làm video motion graphic giới thiệu release', 'làm thêm bản phong cách comic', 'thêm nhạc nền đúng beat', 'render bản nén để đăng social'. Not for talking-head editing, AI text-to-video clips (Seedance/Veo) or React/Remotion projects."
 category: media
@@ -13,7 +13,8 @@ license: MIT
 
 # Vibe Motion Studio
 
-Make a 1920×1080 30 fps motion-graphic video where the scene cuts land on the
+Make a 1920×1080 (16:9) or 1080×1920 (9:16) 30 fps motion-graphic video where
+the scene cuts land on the
 music's beats, reveals land on spoken words, and the audio is broadcast-clean.
 The workflow is fully scripted: facts → script → multix audio → forced
 alignment → beat grid → bar-spliced music → timeline + mix → HTML composition →
@@ -21,7 +22,9 @@ lint/check/snapshot → render → remux → social encode.
 
 Five distinct styles provide options across different audiences and brand archetypes.
 Study the reference and published demos, then build every new video from
-`assets/templates/index-skeleton.html` plus the chosen style reference.
+`assets/templates/index-skeleton.html` (16:9) or
+`assets/templates/index-skeleton-vertical.html` (9:16) plus the chosen style
+reference and its `## Vertical` section for portrait.
 
 | Style | Style reference | Reference / demo | Feel |
 |---|---|---|---|
@@ -78,7 +81,8 @@ into project files, plans or reports.
 - `hyperframes lint` and `check` pass; snapshots of every scene were reviewed.
 - `verify-arrangement.py` reports every segment within ±2 ms and
   `measure-mix-balance.py` shows the music ~4–6 dB under speech.
-- ffprobe: 1920×1080, 30 fps, expected duration, AAC 48 kHz stereo;
+- ffprobe: 1920×1080 (landscape) or 1080×1920 (portrait), 30 fps, expected
+  duration, AAC 48 kHz stereo;
   ebur128 ≈ −14 LUFS with peak ≤ −1 dBFS; blackdetect finds nothing outside fades.
 - `build-timeline` printed no clip/overlap/missing-word warnings.
 - On-screen facts trace to the sources collected in step 1.
@@ -105,4 +109,4 @@ into project files, plans or reports.
   ffmpeg, numpy, scipy).
 - `assets/templates/`: project scripts (`generate-audio-assets`,
   `align-voiceover`, `arrange-music`, `build-timeline`), example data files and
-  the composition skeleton.
+  the composition skeletons (landscape + vertical).
