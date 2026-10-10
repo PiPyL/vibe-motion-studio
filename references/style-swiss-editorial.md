@@ -73,6 +73,8 @@ plain divs/SVG lines for renderer safety.
 - Kinetic type first: every scene opens with headline masks sliding up
   (`yPercent:110→0`, `power4.out` 0.4 s, stagger 0.06). Hero numbers punch
   `scale 2.2→1` 0.28 s. All reveals anchored to words via `W(sid,word)`.
+- Index stamps and `FIG.` badges snap with `stretch(stamp, W(sid,word))`
+  (power4.out 0.3 s, stagger 0.04) — mechanical, no bounce, no elastic.
 - Hairlines draw themselves on kicks (`draw` 0.3 s). Nothing floats; everything
   locks to the column grid.
 - Transitions (mechanical, rotate): `invert` (single-frame black/white flip

@@ -95,6 +95,36 @@
           const ws = $$(".hl .w", sc);
           if (ws.length) tl.fromTo(ws, { autoAlpha: 0, yPercent: 60 }, { autoAlpha: 1, yPercent: 0, duration: 0.42, ease: "power3.out", stagger: 0.05 }, t + 0.05);
         };
+        // Kinetic-type vocabulary (Jitter group A, re-implemented). All times
+        // absolute — anchor the caller with W(sid, word). Randomness only via
+        // rng(seed): never Math.random (determinism contract).
+        // scramble: cypher descramble for ONE hero word element (max ~12 chars,
+        // total d capped at 0.5 s). Builds char spans synchronously, then swaps
+        // glyphs with tl.set so every frame seeks deterministically.
+        const GLYPHS = "!<>-_/[]{}=+*^?#";
+        const scramble = (e, t, o = {}) => {
+          const el = typeof e === "string" ? $(e) : e;
+          const seed = o.seed ?? 7, d = Math.min(o.d ?? 0.45, 0.5), stag = o.stagger ?? 0.03, max = o.max ?? 12;
+          const text = el.textContent;
+          el.innerHTML = [...text].map((c) => (c === " " ? " " : `<span class="c">${c}</span>`)).join("");
+          const R = rng(seed + text.length);
+          const chars = $$(".c", el);
+          const K = 4, step = d / (chars.length + K);
+          chars.forEach((s, i) => {
+            const fin = s.textContent, lock = t + stag * Math.min(i, max);
+            if (i >= max) { tl.set(s, { textContent: fin }, lock); return; }
+            for (let k = K; k >= 1; k--) tl.set(s, { textContent: GLYPHS[(R() * GLYPHS.length) | 0] }, lock - k * step);
+            tl.set(s, { textContent: fin }, lock);
+          });
+        };
+        // stretch: snappy horizontal stretch-and-settle for kick labels / comic words.
+        const stretch = (e, t, o = {}) => tl.fromTo(e,
+          { autoAlpha: 0, scaleX: 1.6, scaleY: 0.7 },
+          { autoAlpha: 1, scaleX: 1, scaleY: 1, duration: o.d ?? 0.3, ease: "power4.out", stagger: o.stagger ?? 0.04, immediateRender: false }, t);
+        // elasticWord: bubbly back.out pop per word for clay/cheerful headlines.
+        const elasticWord = (e, t, o = {}) => tl.fromTo(e,
+          { autoAlpha: 0, scale: 0.3 },
+          { autoAlpha: 1, scale: 1, duration: o.d ?? 0.5, ease: "back.out(1.8)", stagger: o.stagger ?? 0.05, immediateRender: false }, t);
 
         // ---------- beat reactions: pulse the stage on kick downbeats ----------
         tl.fromTo("#fade", { opacity: 1 }, { opacity: 0, duration: 0.3 }, 0);

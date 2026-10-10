@@ -55,7 +55,8 @@ black frames at 1080p — always use PNGs.
 - `.h1`: 64–80 px Plus Jakarta 800, `letter-spacing:-0.02em`,
   `line-height:0.95`, `color:var(--ink)`. Accent word in pill
   (`background:var(--peach)` or `var(--lav-dk)`, white text, `radius:999`,
-  `padding:4px 20px`). Intro: words `pop` stagger 0.05 with `back.out(1.8)`.
+  `padding:4px 20px`). Intro: `elasticWord(.hl .w, W(sid,word))` — back.out(1.8),
+  0.5 s, stagger 0.05.
 - `.bubbly-pill`: `radius:999`, pastel fill, 24 px Poppins 700, padding
   `14px 28px`, `box-shadow:var(--sh-clay)`. Compresses `scale:0.94` 0.08 s on
    every kick then releases — the characteristic squash-and-release beat feel.

@@ -68,7 +68,8 @@ frames in the renderer.
   drops get flash 0.8, shake 1.1–1.4 and full speed lines.
 - Beat reactions: `--rx` misregistration kick on every other beat, `#tone`
   scale/opacity pulse, `#pulse` 1.2% scale on kick downbeats.
-- Headline intro: kick label slides in, then each `.hl .w` flips up in 3D
+- Headline intro: kick label snaps in with `stretch(label, sceneStart + 0.05)`
+  (power4.out 0.3 s), then each `.hl .w` flips up in 3D
   (rotationX −70 → 0) with a stagger.
 - Outro drops the comic energy: universe to "night", rays dim, mascot floats
   with blinks, lines fade in slowly: "Coming soon → Real soon → September 2026

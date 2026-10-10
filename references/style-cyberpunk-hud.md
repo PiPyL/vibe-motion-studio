@@ -1,7 +1,7 @@
 # Style: Cyberpunk Tactical HUD (Sci-Fi Mission Control)
 
 Hyper-technical FUI authority: deep obsidian void, cyan/green telemetry glow,
-polar grid + scan sweep, scanlines, corner reticles, descramble headlines and
+  polar grid + scan sweep, scanlines, corner reticles, descramble headlines and
 console logs that type in on spoken words. Think Andor / Oblivion UI, not cheap
 neon gamer wallpaper.
 Reference edition: target 135–150 s, 122–128 BPM, voice cold tactical officer,
@@ -48,7 +48,7 @@ Attach the RGB-split SVG filter only while `glitch` runs, then back to `none`.
 
 - `.hud-panel`: `background:var(--panel)`, `clip-path: polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))`, 1 px `var(--stroke)` border (fake via outer wrapper — `clip-path` clips real borders), `box-shadow:var(--glow-c)`, padding `28px 32px`. Header row: 10 px status dot (blink via timeline `opacity` on kick, never CSS animation) + `ONLINE // ENCRYPTED` 20 px mono `var(--dim)`.
 - `.kicker`: 22 px JetBrains Mono 700, `[ SYS::CORE_EXEC_v4 ]` uppercase, `color:var(--cyan)`, plus status pill (`.ok` green / `.warn` amber, 20 px, padding `4px 12px`, radius 999).
-- `.h1`: 68–76 px Orbitron 900 uppercase, `letter-spacing:0.04em`, `line-height:0.95`, `color:var(--ink)`. Accent word in `var(--cyan)` with `text-shadow:var(--glow-c)`. Intro = rapid cypher descramble (use `typeIn` + per-letter stagger 0.035), not a plain fade.
+- `.h1`: 68–76 px Orbitron 900 uppercase, `letter-spacing:0.04em`, `line-height:0.95`,   `color:var(--ink)`. Accent word in `var(--cyan)` with `text-shadow:var(--glow-c)`. Intro = `scramble(heroEl, W(sid,word))`: d ≤ 0.5 s, stagger 0.03, max ~12 chars, seeded `rng` only — not a plain fade.
 - `.metric-tile`: 3-up row, each `hud-panel` + big `odo` number (48 px mono, `var(--green)`, `odo` helper on the spoken number word) + segmented meter `|||||||| 99.4%` (width tween via `draw`) + 120×36 SVG sparkline stroked `var(--cyan)`.
 - `.terminal-window`: `hud-panel` + traffic dots (12 px red/amber/green circles) + `.term-line` rows 24 px mono. Each line reveals with `typeIn` at `W(sid,keyword)` onset — never all at once.
 - `.reticle`: 120 px SVG corner brackets, `stroke:var(--cyan)` 3 px, scales `1.4→1` + `autoAlpha` via `pop` locked onto the feature callout word (`W()`), rotates 90° on snare (`isKick(n) && n%2`).
@@ -56,7 +56,7 @@ Attach the RGB-split SVG filter only while `glitch` runs, then back to `none`.
 
 ## Motion language
 
-- Headline intro per scene: kicker `typeIn` at scene start + 0.05, then `.h1` letters descramble stagger 0.035, then panels `rise` stagger 0.07. Choreograph to words: "panel appears on the word *OAuth*", via `W(sid,"oauth")`.
+- Headline intro per scene: kicker `typeIn` at scene start + 0.05, then `scramble` on the hero word, then panels `rise` stagger 0.07. Choreograph to words: "panel appears on the word *OAuth*", via `W(sid,"oauth")`.
 - Transitions (rotate, never repeat neighbours): `glitch` 0.22 s (RGB split + slices), `shutter` (two 960 px blast doors `scaleY` shut 0.14 s, reopen 0.18 s on beat), `wireframe-zoom` (`scale 1.4→1`, `power4.out` 0.35 s), `laser-wipe` (2 px cyan beam `y -540→540` 0.18 s on kick), `fade` outro only. Out: `fadeOut` + `scale:0.98` 0.2 s.
 - Beat reactions (texture only): HUD frame counter + hex tag randomise-and-lock on quarter `B(n)` (HUD only, max 4 nodes); `#flash` `0.22` on kick, `0.32` on kick downbeat; `#pulse` `scale 1.01` on kick downbeats (`n%4==0`).
 - Drops: 1 beat tension — meters freeze + reticles lock + flash dips to 0. Full hit: flash `0.8` cyan, `shake(1.2)`, all meters spike to 100% (`odo` + meter width), `alert-banner` `slideX` in. Never insert true silence (breaks −14 LUFS target).

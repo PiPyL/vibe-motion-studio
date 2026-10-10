@@ -49,6 +49,9 @@ them up that way.
 | `W(sid, word, nth)` / `WE(...)` | onset / end of a spoken word; warns and falls back to scene start when missing |
 | `envKeys(el, t0, t1, step, map)` | keyframes from the voice envelope (mouths, waveforms, meters) |
 | `pop`, `rise`, `slideX`, `flipIn`, `draw`, `typeIn`, `bump`, `odo`, `fadeOut` | entrance vocabulary shared by both styles |
+| `scramble(e,t,o)` | cypher descramble, one hero word, d ≤ 0.5 s, stagger 0.03, seeded `rng` only |
+| `stretch(e,t,o)` | snappy scaleX 1.6→1 / scaleY 0.7→1, power4.out 0.3 s, stagger 0.04 |
+| `elasticWord(e,t,o)` | bubbly back.out(1.8) word pop, 0.5 s, stagger 0.05 |
 | `flash`, `shake` | cut/drop punctuation on shared layers |
 
 Choreograph with word anchors: "the chip appears on the word *OAuth*", not

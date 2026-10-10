@@ -47,6 +47,11 @@ captions → `#flash` → `#fade`.
 
 ## Motion language
 
+- Headline intros (kinetic type, pick one per scene, anchored with `W()`):
+  - `elasticWord(.hl .w, W(sid,word))`: default for glass — bubbly back.out(1.8),
+    0.5 s, stagger 0.05. Hero word may use `scramble(heroEl, W(sid,word))`:
+    d ≤ 0.5 s, stagger 0.03, max ~12 chars, seeded `rng` only (never Math.random).
+  - `stretch` is reserved for `.slam` number moments (power4.out 0.3 s).
 - Transitions: `none`, `up` (y 110 → 0, power3.out 0.5 s), `zoom` (scale 1.3 →
   1, expo.out), `flip` (rotationY −70, perspective 2200), `iris` (clip-path
   circle 0 → 80%), `fade` for the outro. Rotate through them so no two neighbour
