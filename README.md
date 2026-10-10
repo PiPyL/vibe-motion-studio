@@ -43,16 +43,16 @@ voice. Full texts live in `assets/templates/prompts/`:
 
 | # | Job | Style / ratio |
 |---|---|---|
-| 01 | Product launch film | glass keynote / 16:9 |
-| 02 | Changelog video | glass keynote / 16:9 |
-| 03 | Explainer | soft clay / 16:9 |
-| 04 | Vertical social cut | comic / 9:16 |
-| 05 | Product reveal / drop | cyberpunk / 16:9 |
-| 06 | Stats / data story | swiss / 16:9 |
-| 07 | Mobile app showcase | soft clay / 9:16 |
-| 08 | DevTool launch | cyberpunk / 16:9 |
-| 09 | Brand announcement | swiss / 16:9 |
-| 10 | Restyle existing video | any / any |
+| [01](assets/templates/prompts/01-product-launch.md) | Product launch film | glass keynote / 16:9 |
+| [02](assets/templates/prompts/02-changelog.md) | Changelog video | glass keynote / 16:9 |
+| [03](assets/templates/prompts/03-explainer.md) | Explainer | soft clay / 16:9 |
+| [04](assets/templates/prompts/04-social-cut.md) | Vertical social cut | comic / 9:16 |
+| [05](assets/templates/prompts/05-product-reveal.md) | Product reveal / drop | cyberpunk / 16:9 |
+| [06](assets/templates/prompts/06-stats-story.md) | Stats / data story | swiss / 16:9 |
+| [07](assets/templates/prompts/07-app-showcase.md) | Mobile app showcase | soft clay / 9:16 |
+| [08](assets/templates/prompts/08-devtool-launch.md) | DevTool launch | cyberpunk / 16:9 |
+| [09](assets/templates/prompts/09-brand-announcement.md) | Brand announcement | swiss / 16:9 |
+| [10](assets/templates/prompts/10-restyle.md) | Restyle existing video | any / any |
 
 ## Auto-install with AI
 

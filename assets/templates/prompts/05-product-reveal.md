@@ -1,4 +1,5 @@
 # Starter Prompt 05 — Product Reveal / Drop Moment
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** the video needs one big reveal beat (drop, launch moment).
 - **Recommended:** cyberpunk tactical HUD style, 16:9 landscape, 60–120 s,

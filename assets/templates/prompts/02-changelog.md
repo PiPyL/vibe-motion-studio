@@ -1,4 +1,5 @@
 # Starter Prompt 02 — Changelog / Release Notes Video
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** turning release notes into a watchable update.
 - **Recommended:** glass keynote style, 16:9 landscape, 60–120 s, English VO +

@@ -1,4 +1,5 @@
 # Starter Prompt 10 — Restyle an Existing Video
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** reusing a finished video's script/audio in a new style or ratio.
 - **Recommended:** any style, same or new ratio; reuse existing voice + TIMING.

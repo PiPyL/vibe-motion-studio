@@ -1,4 +1,5 @@
 # Starter Prompt 01 — Product Launch Film
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** announcing a new product or a major version.
 - **Recommended:** glass keynote style, 16:9 landscape, 120–150 s, English VO +

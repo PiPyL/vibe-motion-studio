@@ -1,4 +1,5 @@
 # Starter Prompt 06 — Stats / Data Story
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** numbers carry the message (growth, benchmarks, results).
 - **Recommended:** swiss editorial kinetic style, 16:9 landscape, 60–120 s,

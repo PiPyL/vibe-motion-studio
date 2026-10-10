@@ -1,4 +1,5 @@
 # Starter Prompt 07 — Mobile App Showcase
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** showing an app's screens and flows on phones.
 - **Recommended:** soft tactile clay style, 9:16 portrait, 45–90 s, cheerful voice.

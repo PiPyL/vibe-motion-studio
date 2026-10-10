@@ -1,4 +1,5 @@
 # Starter Prompt 04 — Vertical Social Cut
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** cutting a launch or promo for TikTok / Reels / Shorts.
 - **Recommended:** comic multiverse style, 9:16 portrait, 30–60 s, punchy voice.

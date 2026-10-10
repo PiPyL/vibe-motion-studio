@@ -1,4 +1,5 @@
 # Starter Prompt 08 — DevTool / Infra Launch (Technical Audience)
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** launching for developers, security or infra audiences.
 - **Recommended:** cyberpunk tactical HUD style, 16:9 landscape, 120–150 s,

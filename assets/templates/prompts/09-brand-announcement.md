@@ -1,4 +1,5 @@
 # Starter Prompt 09 — Brand / Design Announcement
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** rebrand, design system or executive B2B announcement.
 - **Recommended:** swiss editorial kinetic style, 16:9 landscape, 60–120 s,

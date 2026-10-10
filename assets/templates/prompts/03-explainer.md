@@ -1,4 +1,5 @@
 # Starter Prompt 03 — Explainer (How It Works)
+> Requires: vibe-motion-studio ≥ 1.1.0. Re-check this prompt on every minor release.
 
 - **Use when:** explaining a concept, workflow or architecture simply.
 - **Recommended:** soft tactile clay style, 16:9 landscape, 90–150 s, friendly voice.
