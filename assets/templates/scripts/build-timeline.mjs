@@ -1,21 +1,31 @@
 // Builds the master timeline for the composition:
 // - places every voice-over line on the music's beat grid (scene cuts land on beats),
-// - times the Vietnamese captions against the spoken English words,
+// - times Vietnamese captions from the spoken transcript,
 // - resolves SFX cues (word / beat / scene-relative / absolute),
 // - renders the final audio mix (ducked music + VO + SFX, loudness-normalized) with ffmpeg,
 // - injects the timing data into index.html and writes data/timeline.json.
 // Usage: node scripts/build-timeline.mjs [--no-audio] [--dry] [--stems]
 // Template from the motion-video skill: edit the block marked EDIT (grid sections, anchors, duration) per project.
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import os from "node:os";
+import { buildCaptions } from "./lib/captions.mjs";
+import { duckedMusicFilters } from "./lib/mix-graph.mjs";
+import { lineSpoken } from "./lib/spoken.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(join(root, p), "utf8"));
 const script = readJson("data/script.json");
 const vo = readJson("data/vo-lines.json");
+function spokenLang() {
+  const sidecar = join(root, "data/vo-spoken.json");
+  const lang = existsSync(sidecar) ? JSON.parse(readFileSync(sidecar, "utf8")).lang : script.voice?.spokenLang || "en";
+  if (lang !== "en" && lang !== "vi") throw new Error(`spoken lang must be en or vi, got ${lang}`);
+  return lang;
+}
+const spokenLanguage = spokenLang();
 const noAudio = process.argv.includes("--no-audio");
 const dry = process.argv.includes("--dry"); // print the schedule only
 const stems = process.argv.includes("--stems"); // also write the ducked-music and voice stems to the temp dir
@@ -100,6 +110,7 @@ for (const s of script.scenes) {
       off: at(l.end),
       words: l.words.map((w) => [norm(w.t), round(at(w.s)), round(at(w.e))]),
       vi: s.lines[i].vi,
+      spoken: lineSpoken(s.lines[i], spokenLanguage),
     });
   });
   prevVoEnd = lines[lines.length - 1].segEnd;
@@ -119,40 +130,31 @@ for (const s of scenes) {
 }
 
 // ---------- 2. Vietnamese captions ----------
-// Each VI word borrows the onset of the proportionally matching EN word; long lines are split at punctuation.
-const MAX_CHUNK = 9;
-const captions = [];
-for (const s of scenes) {
-  for (const l of s.lines) {
-    const toks = l.vi.split(/\s+/).filter(Boolean);
-    const en = l.words;
-    const words = toks.map((t, i) => ({ t, s: en[Math.min(en.length - 1, Math.floor((i * en.length) / toks.length))][1] }));
-    for (let i = 1; i < words.length; i++) if (words[i].s <= words[i - 1].s) words[i].s = round(words[i - 1].s + 0.07);
-    let cur = [];
-    const flush = () => cur.length && (captions.push({ scene: s.id, lineOff: l.off, words: cur }), (cur = []));
-    words.forEach((w, i) => {
-      cur.push(w);
-      const left = words.length - i - 1;
-      const punct = /[,.:;?!]$/.test(w.t);
-      if (left === 0) return;
-      if ((punct && cur.length >= 3 && left >= 2 && words.length > MAX_CHUNK) || cur.length >= MAX_CHUNK) flush();
-    });
-    flush();
-  }
+// Spoken Vietnamese uses alignment times. A translation is placed by clause
+// and rejected when a highlight would fall outside the caption frame.
+let captions;
+try {
+  captions = buildCaptions(
+    scenes.flatMap((scene) => scene.lines.map((line) => ({
+      scene: scene.id,
+      vi: line.vi,
+      spoken: line.spoken,
+      off: line.off,
+      words: line.words,
+    }))),
+    spokenLanguage,
+  );
+} catch (err) {
+  console.error(err.message);
+  process.exit(1);
 }
-captions.forEach((c, i) => {
-  c.start = round(c.words[0].s - 0.12);
-  const next = captions[i + 1];
-  const natural = next && next.lineOff === c.lineOff ? next.words[0].s - 0.12 : c.lineOff + 0.5;
-  c.end = round(next ? Math.min(natural, next.words[0].s - 0.16) : natural);
-});
 
 // ---------- 3. SFX cues ----------
 const wordTime = (sceneId, word, nth = 1) => {
   const s = scenes.find((x) => x.id === sceneId);
   if (!s) throw new Error(`cue: unknown scene ${sceneId}`);
   const hits = s.lines.flatMap((l) => l.words).filter((w) => w[0] === word);
-  if (hits.length < nth) throw new Error(`cue: "${word}" #${nth} not found in ${sceneId}`);
+  if (hits.length < nth) throw new Error(`cue: "${word}" #${nth} not found in ${sceneId} (spoken ${spokenLanguage}; cue words must match the spoken transcript)`);
   return hits[nth - 1][1];
 };
 const sfxEvents = cues.map((c) => {
@@ -211,9 +213,9 @@ if (!noAudio) {
   }
   const voOuts = stems ? "[vobus][voside][voenv][vostem]" : "[vobus][voside][voenv]";
   graph.push(`${voLabels.join("")}amix=inputs=${voLabels.length}:normalize=0:dropout_transition=0,asplit=${stems ? 4 : 3}${voOuts}`);
-  // moderate ducking: the music sits ~5 dB under speech and comes back to voice level in the gaps
-  const duck = "sidechaincompress=threshold=0.03:ratio=3:attack=15:release=350:makeup=1";
-  graph.push(stems ? `[mus][voside]${duck},asplit=2[musd][musstem]` : `[mus][voside]${duck}[musd]`);
+  // moderate ducking: the music sits ~5 dB under speech and comes back to voice level in the gaps.
+  // The sidechain is padded to the timeline first; otherwise the music ends with the voice.
+  for (const line of duckedMusicFilters(DURATION, { stems })) graph.push(line);
 
   // sound effects: one input per distinct file
   const sfxLabels = [];

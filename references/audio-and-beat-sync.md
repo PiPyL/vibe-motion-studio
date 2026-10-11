@@ -41,14 +41,21 @@ python ./scripts/generate-vo-vieneu.py --ref-audio ref.wav --only=s01-cover --fo
   cyberpunk → Thiện Minh / Quang Sơn; swiss → Thiền Tâm Đức / Ngọc Huyền;
   clay → Mai Anh / Trúc Ly. Experimental inline cues `[cười]`, `[thở dài]`,
   `[hắng giọng]` are allowed.
-- Output filenames (`assets/audio/vo/<scene-id>.wav`, 48 kHz) are identical to
-  the Gemini path, so `align-voiceover` and `build-timeline` run unchanged.
-  Record the fallback in `data/script.json` (`voice.model: "vieneu-v3-turbo"`,
-  `voice.voice: <preset>`) so rebuilds reproduce it.
+- Output filenames (`assets/audio/vo/<scene-id>.wav`, 48 kHz) match the Gemini
+  path. The generator also writes `data/vo-spoken.json`. Alignment, captions
+  and word anchors follow that language. A language change regenerates every
+  existing clip; `--only` cannot leave the other scenes on the old language.
+  Vietnamese VO does not keep English
+  `W()` or cue words: retarget them to the spoken Vietnamese words, then
+  `align-voiceover --force` and `build-timeline`. Record the fallback in
+  `data/script.json` (`voice.model: "vieneu-v3-turbo"`, `voice.voice: <preset>`,
+  `voice.spokenLang: "vi"`) so rebuilds reproduce it.
 - `align-voiceover.mjs` (ElevenLabs align) works on Vietnamese audio and uses a
   separate quota pool, so it usually still runs. If it is blocked too, align with
   any word-timestamp ASR and convert to `data/align/<id>.json` shaped
-  `{words:[{text,start,end}]}` before re-running the mapping step.
+  `{words:[{text,start,end}]}` before re-running the mapping step. A count
+  mismatch exits 1. The old warning left the extra words unmapped and the mix
+  could drop the rest of the line.
 - SFX/music have no VieNeu equivalent: reuse the project's existing
   `assets/audio/sfx/` + `bgm-raw.mp3`, or wait for quota. Never block VO on them.
 
@@ -60,7 +67,7 @@ python ./scripts/generate-vo-vieneu.py --ref-audio ref.wav --only=s01-cover --fo
 
 | Anchor | Meaning |
 |---|---|
-| `scene` + `word` (+ `nth`) | onset of that spoken word |
+| `scene` + `word` (+ `nth`) | onset of that spoken word. The word is in the spoken language (`en` or `vi`), not always English. |
 | `beat` | quarter note n of the music grid |
 | `abs` | absolute seconds |
 | `scene` + `at` | seconds after the scene cut |
@@ -128,6 +135,7 @@ outro on the calm bed from 136.4 s.
 
 ```text
 music  -5 dB  -> sidechaincompress(threshold=0.03, ratio=3, attack=15, release=350, makeup=1) keyed by the voice bus
+         the voice bus is padded with silence to the full timeline before the compressor
 voice  per-scene gain to -16 LUFS, peaks <= -1 dBFS
 sfx    per-file gain to -16 LUFS, cue vol on top
 sum -> 3.5 s fade out -> two-pass loudnorm I=-14 TP=-1.5 LRA=11 -> AAC 192k 48 kHz (./assets/audio/mix.m4a)
@@ -137,7 +145,15 @@ Balance target: music ~5 dB under the voice while speaking and near voice level
 in the gaps. The first edition used −7 dB with ratio 5 / threshold 0.02: the
 music sat ~10 dB under the voice and viewers reported "there is no music".
 Measure with `build-timeline.mjs --stems` + `scripts/measure-mix-balance.py`
-instead of trusting the numbers by ear on laptop speakers.
+instead of trusting the numbers by ear on laptop speakers. The command exits 1
+when the numbers miss the gate, including a music stem that dies with the voice.
+
+`sidechaincompress` ends when its sidechain ends. A voice bus that stops on the
+last word used to cut the music there. The final `apad` only extends silence,
+so the mix file can still be the right length while the ending is mute. The
+graph pads the sidechain to the timeline before the compressor. The balance
+check counts a short music stem as silence for the rest of the timeline instead
+of cropping both stems to the shorter file.
 
 The voice bus is also rendered to a mono envelope at the video frame rate
 (`data/vo-envelope.json`, `TIMING.env`) that drives mouths and waveforms.

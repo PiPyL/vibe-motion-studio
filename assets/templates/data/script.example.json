@@ -4,6 +4,7 @@
   "voice": {
     "model": "gemini-3.8-flash-tts",
     "voice": "Fenrir",
+    "spokenLang": "en",
     "style": "Hyped trailer narrator. Fast, punchy, playful, crisp diction, dramatic little pauses before reveals."
   },
   "outroStyle": "Calm, warm and intimate, slow and soft, a quiet hopeful promise at the end of a movie.",

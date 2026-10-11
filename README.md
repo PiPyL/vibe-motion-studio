@@ -12,8 +12,9 @@ Forked from `motion-video` with two big upgrades:
    captions and renderer limits.
 2. **Free voice fallback** — when Gemini / ElevenLabs quotas run out, generate the
    voice-over on-device with [VieNeu-TTS](https://github.com/pnnbao97/VieNeu-TTS)
-   (`assets/templates/scripts/generate-vo-vieneu.py`). Same output filenames, so the
-   rest of the pipeline is unchanged.
+   (`assets/templates/scripts/generate-vo-vieneu.py`). Output filenames stay the
+   same. Alignment, captions and word anchors follow `data/vo-spoken.json`, so a
+   Vietnamese fallback uses the Vietnamese transcript rather than the English one.
 
 ## Five styles
 

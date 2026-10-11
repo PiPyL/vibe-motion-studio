@@ -12,8 +12,8 @@ copies; `<skill>` is this skill's directory.
   index.html                 composition (start from <skill>/assets/templates/index-skeleton.html)
   hyperframes.json           copy <skill>/assets/templates/hyperframes.json
   data/                      script.json, sfx.json, cues.json, music-plan.json, outro-plan.json, music-arrangement.json
-   scripts/                   copy <skill>/assets/templates/scripts/*.mjs and <skill>/scripts/fit-beat-grid.py
-                        (+ <skill>/assets/templates/scripts/generate-vo-vieneu.py when Gemini/ElevenLabs quota is exhausted)
+   scripts/                   copy <skill>/assets/templates/scripts/ (the .mjs files, generate-vo-vieneu.py, and lib/)
+                        and <skill>/scripts/fit-beat-grid.py
   assets/fonts/              local TTF files (OFL/Apache fonts from Google Fonts)
   assets/images/             baked texture tiles (PNG)
   assets/audio/{vo,sfx,music}/
@@ -29,11 +29,14 @@ so the first edition stays untouched.
 - Collect facts only from primary sources (release notes, repo docs, code). Every
   on-screen label must trace to one; write the evidence into a short report
   under `plans/reports/` before scripting.
-- `data/script.json`: `voice` (model, voice, style), `outroStyle`, `scenes[]`.
-  Each scene has `id` (`sNN-slug`, used as the VO file name and the timing key),
-  optional `outro: true`, and `lines[]` with `en` (displayed/aligned text),
-  optional `say` (pronunciation for TTS, e.g. "three point thirty-four"), and `vi`
-  (caption). Keep one idea per line: lines are the unit of placement.
+- `data/script.json`: `voice` (model, voice, style, `spokenLang`), `outroStyle`,
+  `scenes[]`. `spokenLang` is `en` or `vi`. English is the default: Gemini reads
+  `say` or `en`, and `vi` is the caption. Vietnamese VO, including the VieNeu
+  fallback, reads `vi` and that text is the transcript for alignment, captions
+  and word anchors. Each scene has `id` (`sNN-slug`, used as the VO file name
+  and the timing key), optional `outro: true`, and `lines[]` with `en`,
+  optional `say` (pronunciation, e.g. "three point thirty-four"), and `vi`.
+  Keep one idea per line: lines are the unit of placement.
 - Budget: ~150 words of VO per minute at TEMPO 1.08. The references are 144 s and
   151 s with 16 scenes (cover, stats, 12 features, stability, outro).
 
@@ -54,7 +57,12 @@ python ./scripts/generate-vo-vieneu.py --voice "Hải Đăng"   # copy from <ski
 
 `--force` regenerates, `--only=id1,id2` limits to some scenes/SFX. The script runs
 multix in a temp dir because multix drops copies into `./multix-output`.
-Credentials come from multix's own config; never print or copy key values.
+Spoken text is an argument array, not a shell command, so a price like `$29`
+is read aloud instead of being expanded. Credentials come from multix's own
+config; never print or copy key values. Voice generation writes
+`data/vo-spoken.json`. Alignment and the timeline read that file. Reusing
+WAVs from the other language fails until `--force` regenerates every existing
+clip. `--only` does not leave the other scenes on the old language.
 Music details, the arrangement and the mix are in `audio-and-beat-sync.md`.
 
 ## 3. Align the voice
@@ -63,8 +71,12 @@ Music details, the arrangement and the mix are in `audio-and-beat-sync.md`.
 node ./scripts/align-voiceover.mjs        # ElevenLabs forced alignment -> data/vo-lines.json
 ```
 
-Warnings like `12 aligned words vs 13 script tokens` mean `say`/`en` tokenize
-differently from what was spoken; fix the text or re-generate that scene.
+The mapper uses the language in `data/vo-spoken.json` (otherwise
+`voice.spokenLang`, otherwise `en`). A token mismatch exits 1 and does not
+write `vo-lines.json`. That used to be a warning, and the mix then cut the
+WAV with the short timestamps, so speech after the last mapped word was lost.
+Fix the transcript or re-generate the scene and re-align with `--force`.
+Do not continue past a non-zero exit.
 
 ## 4. Beat grid and music arrangement
 
@@ -86,11 +98,21 @@ node ./scripts/build-timeline.mjs             # + captions, SFX cues, audio mix,
 node ./scripts/build-timeline.mjs --no-audio  # timing only (keeps the existing mix and envelope)
 node ./scripts/build-timeline.mjs --stems     # also writes stems for the balance check
 python <skill>/scripts/measure-mix-balance.py .
+python <skill>/scripts/verify-delivery.py .
 ```
+
+`measure-mix-balance.py` exits 1 when the music stem is short, silent after
+the last spoken word, more than 10 dB under the voice, or louder than the
+voice. The target is still about 4–6 dB under speech. `verify-delivery.py`
+also fails when a caption highlight sits outside its frame. Both look for
+stems in the directory `build-timeline.mjs --stems` prints (`stems -> ...`,
+`<temp>/<project name>-mix`). Pass `--stems-dir` with that path if the
+project folder name is not the temp folder's prefix.
 
 Read every warning: `clips the previous voice`, `overlaps previous line`,
 `voice runs past its scene end`, `cue: "word" #n not found`. Each one is a
-visible or audible defect; fix the anchor or the cue rather than ignoring it.
+visible or audible defect. A cue word has to be in the spoken transcript:
+English words when `spokenLang` is `en`, Vietnamese words when it is `vi`.
 
 ## 6. Composition
 
@@ -102,13 +124,18 @@ Choreograph each scene with `W(sid, "word")` so reveals land on the spoken word.
 ```bash
 npx --yes hyperframes@0.7.99 lint
 npx --yes hyperframes@0.7.99 check
-npx --yes hyperframes@0.7.99 snapshot --at 2,18.5,40,80,120,148 --describe false
+AT=$(python <skill>/scripts/snapshot-times.py .)
+npx --yes hyperframes@0.7.99 snapshot --at "$AT" --describe false
 ```
 
 `check` flags overlaps and contrast; use `data-layout-allow-overlap` only on
 intentional overlaps (stacked cards, mascots over panels). Snapshots are large
 PNGs: downscale to JPEG before viewing them if the tool context is limited.
-Look at every scene's busiest moment and the caption band.
+The times come from this timeline: just after each cut, just before the next
+cut, and on each word anchor. A 30–60 s video is not sampled at 120 s or 148 s.
+Look at every scene's busiest moment and the caption band, then play the full
+render and judge pace, pronunciation and the ending. Snapshots do not replace
+that playback.
 
 ## 8. Render, restore the mix, verify
 
@@ -129,12 +156,20 @@ The remux matters: the renderer re-encodes AAC and pushed the true peak to
 
 ```bash
 ffmpeg -y -i renders/<slug>.mp4 -c:v libx264 -preset slow -crf 21 -maxrate 6M -bufsize 12M \
-  -pix_fmt yuv420p -profile:v high -level 4.1 -g 60 -c:a aac -b:a 192k -ar 48000 \
+  -pix_fmt yuv420p -profile:v high -level 4.1 -g 60 -c:a copy \
   -movflags +faststart renders/<slug>-social.mp4
+python <skill>/scripts/verify-delivery.py . --social renders/<slug>-social.mp4 --master renders/<slug>.mp4
 ```
+
+Copy the audio. Re-encoding AAC here pushed a mastered file off its true-peak
+target, and a measurement taken before this step does not describe the file
+you deliver. `verify-delivery.py` measures the social file itself and exits 1
+when loudness is outside about −14 LUFS (−16 to −12), true peak is above
+−1 dBFS, or the duration does not match the master.
 
 Result on the comic edition: 406 MB → 101.6 MB, SSIM 0.977. Check with
 `ffmpeg -i social.mp4 -i master.mp4 -lavfi ssim -f null -` when quality matters.
+SSIM scores the picture only.
 
 ## 9b. Vertical edition (9:16)
 
@@ -150,9 +185,14 @@ ffmpeg -y -i renders/<slug>-vertical.mp4 -i ./assets/audio/mix.m4a -map 0:v:0 -m
 ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,sample_rate,channels -show_entries format=duration renders/<slug>-vertical.mp4
 # expect width=1080 height=1920; same ebur128 (~-14 LUFS, peak <= -1 dBFS) and blackdetect gates
 ffmpeg -y -i renders/<slug>-vertical.mp4 -c:v libx264 -preset slow -crf 21 -maxrate 6M -bufsize 12M \
-  -pix_fmt yuv420p -profile:v high -level 4.1 -g 60 -c:a aac -b:a 192k -ar 48000 \
+  -pix_fmt yuv420p -profile:v high -level 4.1 -g 60 -c:a copy \
   -movflags +faststart renders/<slug>-vertical-social.mp4
+python <skill>/scripts/verify-delivery.py . --social renders/<slug>-vertical-social.mp4 --master renders/<slug>-vertical.mp4
 ```
+
+The portrait report includes caption size and bottom inset scaled to a 360 px
+wide phone. Read it. It does not say how much of a platform's controls cover
+the frame; check that against the actual post UI.
 
 ## 10. Studio preview
 
@@ -167,7 +207,8 @@ by this project, and stop it when the session ends.
 
 | Changed | Re-run |
 |---|---|
-| Script text of a scene | `generate-audio-assets vo --only=<id> --force` (or `generate-vo-vieneu.py --only=<id> --force` on fallback) → `align-voiceover --force` → `build-timeline` |
+| Script text, same spoken language | `generate-audio-assets vo --only=<id> --force` (or `generate-vo-vieneu.py --only=<id> --force` on fallback) → `align-voiceover --force` → `build-timeline` |
+| Spoken language | Regenerate every existing clip with `--force` (no leftover `--only` scenes), retarget cue words and `W()` calls, then `align-voiceover --force` → `build-timeline` |
 | Music track | `fit-beat-grid` → edit arrangement → `arrange-music` → `verify-arrangement` → `build-timeline` |
 | Anchors / cues | `build-timeline` (audio changes) or `--no-audio` (captions/timing only) |
 | Visuals only | `lint` → `check` → `render` → remux |

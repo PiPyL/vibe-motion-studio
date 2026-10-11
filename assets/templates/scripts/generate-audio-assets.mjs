@@ -5,11 +5,12 @@
 // MiniMax Music answers HTTP 410 for new accounts, so the music comes from data/music-plan.json;
 // run scripts/arrange-music.mjs afterwards to put its drops on the video's beats.
 // Usage: node scripts/generate-audio-assets.mjs <vo|sfx|music|all> [--force] [--only=id1,id2]
-import { spawn } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import os from "node:os";
+import { spawnArgv } from "./lib/spawn-argv.mjs";
+import { assertSpokenReuse, keepsForeignClips, lineSpoken, spokenRecord } from "./lib/spoken.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const script = JSON.parse(readFileSync(join(root, "data/script.json"), "utf8"));
@@ -22,15 +23,9 @@ const only = (args.find((a) => a.startsWith("--only=")) || "").slice(7).split(",
 const workDir = join(os.tmpdir(), `${basename(root)}-multix`);
 mkdirSync(workDir, { recursive: true });
 
-const quote = (v) => `"${String(v).replace(/"/g, '\\"')}"`;
-
 function multix(argv) {
-  return new Promise((ok, fail) => {
-    const child = spawn("multix", argv.map(quote), { shell: true, cwd: workDir });
-    let log = "";
-    child.stdout.on("data", (d) => (log += d));
-    child.stderr.on("data", (d) => (log += d));
-    child.on("close", (code) => (code === 0 ? ok(log) : fail(new Error(`multix ${argv[0]} ${argv[1]} failed (${code}):\n${log.slice(-800)}`))));
+  return spawnArgv("multix", argv, { cwd: workDir }).catch((err) => {
+    throw new Error(`multix ${argv[0]} ${argv[1]} failed:\n${err.message}`);
   });
 }
 
@@ -45,11 +40,18 @@ async function pool(items, size, fn) {
 async function genVo() {
   const dir = join(root, "assets/audio/vo");
   mkdirSync(dir, { recursive: true });
+  const lang = script.voice?.spokenLang || "en";
   const scenes = script.scenes.filter((s) => !only.length || only.includes(s.id));
+  const existingIds = script.scenes.filter((s) => existsSync(join(dir, `${s.id}.wav`))).map((s) => s.id);
+  const kept = keepsForeignClips(existingIds, scenes.map((s) => s.id), force);
+  const sidecar = join(root, "data/vo-spoken.json");
+  const previous = existsSync(sidecar) ? JSON.parse(readFileSync(sidecar, "utf8")) : null;
+  assertSpokenReuse(previous, lang, kept);
+  writeFileSync(sidecar, `${JSON.stringify(spokenRecord(lang), null, 2)}\n`);
   await pool(scenes, 4, async (s) => {
     const out = join(dir, `${s.id}.wav`);
     if (existsSync(out) && !force) return console.log(`skip vo ${s.id}`);
-    const text = s.lines.map((l) => l.say || l.en).join(" ");
+    const text = s.lines.map((line) => lineSpoken(line, lang)).join(" ");
     const style = s.outro ? script.outroStyle : script.voice.style;
     await multix(["gemini", "generate-speech", "--model", script.voice.model, "--voice", script.voice.voice, "--style", style, "--text", text, "--output", out]);
     console.log(`vo ${s.id} -> ${out}`);

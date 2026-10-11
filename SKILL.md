@@ -7,7 +7,7 @@ category: media
 keywords: [motion-graphic, video, hyperframes, gsap, launch-video, voice-over, captions, karaoke, beat-sync, elevenlabs, gemini-tts, multix, vieneu-tts, free-voice, spider-verse, comic, keynote, cyberpunk, hud, swiss-editorial, claymorphism, tactile-clay, social-encode]
 metadata:
   author: BestAgentKits
-  version: "1.1.0"
+  version: "1.2.0"
 license: MIT
 ---
 
@@ -53,14 +53,17 @@ This skill does NOT handle:
 ## How to work
 
 1. Pin the outcome before touching files: topic and sources, style (one of the
-   five, or a new one derived from them), duration, voice language (English VO +
-   Vietnamese captions by default), ending. Ask only if the style or
-   the facts source is unknown.
+   five, or a new one derived from them), duration, voice language, ending.
+   English VO plus Vietnamese captions is the default (`voice.spokenLang: "en"`).
+   Vietnamese VO (`"vi"`, including the VieNeu fallback) uses the `vi` lines as
+   the spoken transcript, so captions, alignment and word anchors all follow
+   those words. Ask only if the style or the facts source is unknown.
 2. Create `assets/videos/<slug>/` (never overwrite a finished edition) and a plan
    under `plans/` following the repo convention. Copy the templates from
    `assets/templates/` of this skill: `scripts/*.mjs`, `data/*.example.json`
    (rename to `.json`), `hyperframes.json`, `index-skeleton.html` as
-   `index.html`, plus `scripts/fit-beat-grid.py`.
+   `index.html`, plus `scripts/fit-beat-grid.py`. Copy `scripts/lib/` with the
+   project scripts; the audio commands import it.
 3. Follow `references/production-pipeline.md` step by step. Each step writes a
    file the next one reads, so do not reorder them.
 4. Get the music right with `references/audio-and-beat-sync.md`: fit the grid,
@@ -78,13 +81,27 @@ into project files, plans or reports.
 
 ## Done when
 
-- `hyperframes lint` and `check` pass; snapshots of every scene were reviewed.
+- `hyperframes lint` and `check` pass. Snapshots come from `snapshot-times.py`
+  (every cut and word anchor, inside this video's duration). The fixed list
+  `2,18.5,40,80,120,148` belongs to one 151 s edit. Play the full render and
+  judge pace, pronunciation and the ending; snapshots do not replace that.
 - `verify-arrangement.py` reports every segment within ±2 ms and
-  `measure-mix-balance.py` shows the music ~4–6 dB under speech.
+  `measure-mix-balance.py` exits 0. The target is still music about 4–6 dB
+  under speech. The command fails when music is more than 10 dB under the
+  voice, louder than the voice, shorter than the timeline, or silent after
+  the last spoken word.
+- `verify-delivery.py` exits 0 for the timeline, caption bounds and local
+  files. After the social encode, run it again with `--social` and `--master`:
+  the delivered file stays about −14 LUFS, true peak ≤ −1 dBFS, and its
+  duration matches the master. A portrait project prints caption size and
+  bottom inset scaled to 360 px wide; read those numbers, they are not a guess
+  about how much a platform covers.
 - ffprobe: 1920×1080 (landscape) or 1080×1920 (portrait), 30 fps, expected
   duration, AAC 48 kHz stereo;
   ebur128 ≈ −14 LUFS with peak ≤ −1 dBFS; blackdetect finds nothing outside fades.
-- `build-timeline` printed no clip/overlap/missing-word warnings.
+- `build-timeline` and `align-voiceover` both exited 0. A token mismatch, a
+  caption highlight outside its frame, or a missing spoken word is a failed
+  run. Clip, overlap and missing-word warnings are still defects to fix.
 - On-screen facts trace to the sources collected in step 1.
 
 ## Resources
@@ -104,9 +121,16 @@ into project files, plans or reports.
 - `scripts/verify-arrangement.py <project> [--tolerance-ms 2]`: splice lag per
   segment; exits 1 on drift.
 - `scripts/measure-mix-balance.py <project>`: music under speech vs in gaps,
-  from `build-timeline.mjs --stems`.
+  from `build-timeline.mjs --stems`. Exits 1 when the mix fails the gate above.
+- `scripts/snapshot-times.py <project>`: comma-separated snapshot times from
+  `data/timeline.json`.
+- `scripts/verify-delivery.py <project> [--stems-dir DIR] [--social FILE --master FILE] [--report data/delivery-report.json]`:
+  timeline, caption bounds, local files, stems and the delivered social file.
+  Writes one pass/fail line per artifact.
 - `scripts/tests/`: `python -m unittest discover -s scripts/tests` (needs
-  ffmpeg, numpy, scipy).
+  ffmpeg, numpy, scipy, node). Covers the beat grid, the splice check, and
+  the pipeline regressions (shell arguments, alignment language, caption
+  bounds, sidechain length, mix gate, delivery report).
 - `assets/templates/`: project scripts (`generate-audio-assets`,
   `align-voiceover`, `arrange-music`, `build-timeline`), example data files and
   the composition skeletons (landscape + vertical).

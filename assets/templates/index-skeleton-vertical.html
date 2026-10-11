@@ -80,8 +80,32 @@
           return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
         };
 
-        // headline words become spans for staggered entrances (build the DOM before any tween)
-        $$(".hl").forEach((h) => (h.innerHTML = h.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(" ")));
+        // headline words become spans for staggered entrances (build the DOM before any tween).
+        // Walk text nodes so <em>, <br> and .accent-pill stay intact.
+        function wrapHeadlineWords(root) {
+          const visit = (node) => {
+            for (const child of Array.from(node.childNodes)) {
+              if (child.nodeType === 3) {
+                const text = child.textContent;
+                if (!text || !/\S/.test(text)) continue;
+                const frag = child.ownerDocument.createDocumentFragment();
+                for (const part of text.split(/(\s+)/)) {
+                  if (!part) continue;
+                  if (/^\s+$/.test(part)) frag.appendChild(child.ownerDocument.createTextNode(part));
+                  else {
+                    const span = child.ownerDocument.createElement("span");
+                    span.className = "w";
+                    span.textContent = part;
+                    frag.appendChild(span);
+                  }
+                }
+                child.parentNode.replaceChild(frag, child);
+              } else if (child.nodeType === 1) visit(child);
+            }
+          };
+          visit(root);
+        }
+        $$(".hl").forEach((h) => wrapHeadlineWords(h));
 
         // ---------- animation vocabulary ----------
         const pop = (e, t, o = {}) => tl.fromTo(e, { autoAlpha: 0, scale: o.from ?? 0.4 }, { autoAlpha: 1, scale: 1, duration: o.d ?? 0.45, ease: o.ease ?? "back.out(2.2)", stagger: o.stagger ?? 0 }, t);

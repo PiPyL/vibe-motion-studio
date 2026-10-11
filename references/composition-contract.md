@@ -38,7 +38,8 @@ captions[{ start, end, words[[text, start]] }], sfx[{ sfx, vol, t }], env[frame]
 ```
 
 Words are lower-cased with punctuation stripped (`"let's"`, `"v334"`), so look
-them up that way.
+them up that way. They come from the spoken transcript. With
+`data/vo-spoken.json` `"lang": "vi"`, look up the Vietnamese words.
 
 ## Helpers
 
@@ -72,10 +73,21 @@ Loop `n` over beats until `outroBeat`; on kick beats pulse a background layer
 (orbs or halftone), on kick downbeats scale a `#pulse` wrapper by ~1%. Keep it
 subtle: reactions are texture, cuts and drops carry the rhythm.
 
+## Headlines
+
+Wrap `.hl` words in `.w` by walking text nodes. `<em>`, `<br>` and
+`.accent-pill` stay where they are, and a line break still separates the
+words around it. Rebuilding the headline from `textContent` deletes that
+markup and can glue the words on either side of a `<br>`.
+
 ## Captions
 
 - Vietnamese karaoke: one `.cap` per caption chunk (≤ 9 words, split at
-  punctuation), each word a span that highlights at its borrowed English onset.
+  punctuation). When the voice-over is Vietnamese, each word highlights at its
+  alignment time. When the voice-over is English, a translated caption is
+  placed by clause inside the spoken window. A highlight that would fall
+  outside the caption frame, or a line that cannot be read at a 70 ms gap,
+  fails `build-timeline` instead of shipping.
 - Bottom band only, full frame width (`.cap` 1920 px, box up to 1700 px).
   Nothing else may live in that band: `check` will flag overlap.
 

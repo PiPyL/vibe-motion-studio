@@ -23,8 +23,11 @@ health & wellness — where friendliness converts.
 --sh-hover: 0 26px 45px rgba(36,43,53,0.10), 0 10px 20px rgba(36,43,53,0.05), inset 0 -3px 6px rgba(36,43,53,0.04), inset 0 5px 10px rgba(255,255,255,0.98);
 ```
 
-Pastel is for fills only — text is always `--ink` on light, white on
-`--lav-dk`/`--peach` fills (never white on `--lav` — contrast fails).
+Pastel is for fills only. Text on light fills and on `--peach` (`#ff8a65`)
+is `--ink` (`#242b35`): white on peach is about 2.3:1 and fails for text that
+must be read quickly. White text is only for `--lav-dk` (`#6d5bff`). Never
+put white on `--peach` or `--lav`.
+Readable pair: text #242b35 on fill #ff8a65.
 
 Fonts (all OFL): Plus Jakarta Sans or Outfit 800/900 (headlines, rounded),
 Poppins 600 / Inter 600 (body/labels), Sniglet 400 (badges/numbers accents),
@@ -54,8 +57,8 @@ black frames at 1080p — always use PNGs.
   on keyword `W()`.
 - `.h1`: 64–80 px Plus Jakarta 800, `letter-spacing:-0.02em`,
   `line-height:0.95`, `color:var(--ink)`. Accent word in pill
-  (`background:var(--peach)` or `var(--lav-dk)`, white text, `radius:999`,
-  `padding:4px 20px`). Intro: `elasticWord(.hl .w, W(sid,word))` — back.out(1.8),
+  (`background:var(--peach)` with `--ink` text, or `background:var(--lav-dk)`
+  with white text, `radius:999`, `padding:4px 20px`). Intro: `elasticWord(.hl .w, W(sid,word))` — back.out(1.8),
   0.5 s, stagger 0.05.
 - `.bubbly-pill`: `radius:999`, pastel fill, 24 px Poppins 700, padding
   `14px 28px`, `box-shadow:var(--sh-clay)`. Compresses `scale:0.94` 0.08 s on
